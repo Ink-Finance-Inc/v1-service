@@ -1,0 +1,628 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addrRegistry",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "dao",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes[]",
+        "name": "metadata",
+        "type": "bytes[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes[]",
+        "name": "kvData",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "ENewProposal",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "dao",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes[]",
+        "name": "kvData",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "EProposalAppend",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "dao",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bool",
+        "name": "agree",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "topicID",
+        "type": "bytes32"
+      }
+    ],
+    "name": "EProposalDecide",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "dao",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "topicID",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      }
+    ],
+    "name": "ETopicCreate",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "dao",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "topicID",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      }
+    ],
+    "name": "ETopicFix",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "addrRegistry",
+    "outputs": [
+      {
+        "internalType": "contract IAddressRegistry",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "kvData",
+        "type": "bytes[]"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "changeProposal",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bool",
+        "name": "agree",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "decideProposal",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "startKey",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pageSize",
+        "type": "uint256"
+      }
+    ],
+    "name": "getProposalAllMetadata",
+    "outputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "kvData",
+        "type": "bytes[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      }
+    ],
+    "name": "getProposalKvData",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "typeID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "startKey",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pageSize",
+        "type": "uint256"
+      }
+    ],
+    "name": "getProposalKvDataKeys",
+    "outputs": [
+      {
+        "internalType": "string[]",
+        "name": "keys",
+        "type": "string[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      }
+    ],
+    "name": "getProposalMetadata",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "typeID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getProposalSummary",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "enum IProposalRegistryInfo.ProposalStatus",
+            "name": "status",
+            "type": "uint8"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "proposalID",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "topicID",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "dao",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct IProposalRegistryInfo.Proposal",
+        "name": "proposal",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "topicID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "startKey",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pageSize",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTopicAllMetadata",
+    "outputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "kvData",
+        "type": "bytes[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "topicID",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getTopicInfo",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "topicID",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "proposalIDs",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "address",
+            "name": "dao",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct IProposalRegistryInfo.Topic",
+        "name": "topic",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "topicID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      }
+    ],
+    "name": "getTopicKeyProposal",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "topicID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      }
+    ],
+    "name": "getTopicMetadata",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "typeID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "topicID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "startKey",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pageSize",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTopicMetadataKeys",
+    "outputs": [
+      {
+        "internalType": "string[]",
+        "name": "keys",
+        "type": "string[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "typeID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "internalType": "string",
+        "name": "desc",
+        "type": "string"
+      }
+    ],
+    "name": "helpEncodeMetadata",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addrReg",
+        "type": "address"
+      }
+    ],
+    "name": "init",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes[]",
+            "name": "items",
+            "type": "bytes[]"
+          },
+          {
+            "internalType": "bytes[]",
+            "name": "headers",
+            "type": "bytes[]"
+          }
+        ],
+        "internalType": "struct IProposalOperator.ProposalApplyInfo",
+        "name": "proposal",
+        "type": "tuple"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "newProposal",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "proposalID",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "proposalNum",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes4",
+        "name": "interfaceId",
+        "type": "bytes4"
+      }
+    ],
+    "name": "supportsInterface",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

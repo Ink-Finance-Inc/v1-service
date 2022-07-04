@@ -1,0 +1,4 @@
+port: 10823
+mysql:
+  connection: [username]:[password]@([address]:[port])/[dbname]?charset=utf8mb4&parseTime=True&loc=Local
+block_service: [blockservice_url]
