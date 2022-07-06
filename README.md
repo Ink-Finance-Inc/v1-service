@@ -37,3 +37,42 @@
     1. 基于项目根目录第config-[env].yml， 把[env]替换为相关的执行环境，并且把文件内的MySQL 以及区块链RPC访问配置为需要的链接
 7. 指定配置文件启动项目
     1. 全部配置完成后，在项目根目录执行：go run main [env]，即开始扫链，同时根据接口返回对应的链上事件抛出的加工后的数据来满足查询需求。
+
+
+
+## Overview
+
+This project is based on Golang. It supports InkFinance Governance Module log data searching and improves the system's performance.
+
+It's mainly achieved:
+
+
+1. Social account binding.
+2. Automatically monitor the events of different contracts(e.g., DAO/Committee/Proposal), and build relations between those contracts.
+3. High-performance, centralized data query services.
+4. Special case tools for process control.
+
+
+## Categories
+1. /chain blockchain event scanning
+2. /conf database configuration and initialization
+3. /constant constants of the system
+4. /httprouter router definitions
+5. /request request definitions
+6. /scripts database scripts(initialize database)
+7. /service business logic implements.
+8. /cmd scripts to generate database model and data access object
+9. /dal auto-generated database models and data access object
+10. /transport service definitions and handler
+
+## How to deploy
+
+1. install Go (suggest 1.18)
+2. clone this project
+3. install MySQL database(suggest ^5.6)
+4. initialize database scripts; the script is located in ./scripts/db_inkfinance_init.sql 
+5. run ./scripts/init_scan_task.sql to initialize the scanning task（make sure the 4th step runs successfully）
+6. update configuration: find the config-[env].yml file and replace [env] as any environment you want(e.g., dev/prd/test/), and update the MySQL connection and blockchain RPC service.
+7. once all the previous steps are done, go to the root folder of the project and run: go run main [env](the [evn] is what you named in the step 6)
+8. Enjoy!
+
