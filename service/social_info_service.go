@@ -38,8 +38,19 @@ func (SocialInfoService) ValidSocialInfo(ctx context.Context, req *request.Valid
 	//
 	// queryTwitter(req.Link)
 	// database
-	users := model.User{
 
+	// MediaType:    req.MediaType,
+	db := query.Use(conf.DB)
+
+	mDo := db.SocialInfo.WithContext(ctx)
+	socialInfo, err := mDo.Where(db.SocialInfo.MainAccounts.Eq(req.MainAccount)).Or(db.SocialInfo.SocialAccount.Eq(req.MediaAccount)).First()
+	if err == nil {
+		// exist
+		fmt.Println("main:", socialInfo.MainAccounts, " social: ", socialInfo.SocialAccount, " ----- exist! ")
+		return &request.ValidSocialContentResponse{Code: 1, Message: "success", Sign: "sign messages"}, nil
+	}
+
+	users := model.User{
 		MainAccounts: req.MainAccount,
 		ChainType:    req.ChainType,
 		ChainID:      req.ChainID,
@@ -47,38 +58,18 @@ func (SocialInfoService) ValidSocialInfo(ctx context.Context, req *request.Valid
 		CreateTime:   time.Now(),
 		Valid:        1,
 	}
-
-	// MediaType:    req.MediaType,
-	db := query.Use(conf.DB)
-
 	do := db.User.WithContext(ctx)
-	userID := int32(0)
-	user, err := do.Where(db.User.MainAccounts.Eq(req.MainAccount)).First()
-	if err != nil {
-		// not exist
-		do.Create(&users)
+	do.Create(&users)
 
-		userID = users.ID
-	} else {
-		fmt.Println(user)
-		userID = user.ID
+	mySocials := model.SocialInfo{
+		SocialAccount: req.MediaAccount,
+		MediaType:     req.MediaType,
+		UserID:        users.ID,
+		MainAccounts:  req.MainAccount,
+		CreateTime:    time.Now(),
+		Valid:         1,
 	}
-
-	mDo := db.SocialInfo.WithContext(ctx)
-	socialInfo, err := mDo.Where(db.SocialInfo.MainAccounts.Eq(req.MainAccount)).First()
-	if err != nil {
-		mySocials := model.SocialInfo{
-			SocialAccount: req.MediaAccount,
-			MediaType:     req.MediaType,
-			UserID:        userID,
-			MainAccounts:  req.MainAccount,
-			CreateTime:    time.Now(),
-			Valid:         1,
-		}
-		mDo.Create(&mySocials)
-	} else {
-		fmt.Println(socialInfo)
-	}
+	mDo.Create(&mySocials)
 
 	return &request.ValidSocialContentResponse{Code: 1, Message: "success", Sign: "sign messages"}, nil
 
