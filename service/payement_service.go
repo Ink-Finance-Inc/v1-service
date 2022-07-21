@@ -122,7 +122,7 @@ func (PaymentService) GetScheduleList(ctx context.Context, req *request.DAOSched
 	var conds []gen.Condition
 	if req.MemberAddress != "" {
 		tbScheduleMemberInfo := db.ScheduleMemberInfo
-		err := tbScheduleMemberInfo.WithContext(ctx).Select(tbScheduleInfo.ScheduleID).Where(tbScheduleMemberInfo.DaoAddress.Eq(req.DAOAddress), tbScheduleMemberInfo.MemberAddr.Eq(req.MemberAddress)).Scan(&scheduleIDs)
+		err := tbScheduleMemberInfo.WithContext(ctx).Select(tbScheduleMemberInfo.ScheduleID).Where(tbScheduleMemberInfo.DaoAddress.Eq(req.DAOAddress), tbScheduleMemberInfo.MemberAddr.Eq(req.MemberAddress)).Scan(&scheduleIDs)
 		if err == nil {
 
 		}
@@ -130,6 +130,8 @@ func (PaymentService) GetScheduleList(ctx context.Context, req *request.DAOSched
 			conds = append(conds, tbScheduleInfo.ScheduleID.In(scheduleIDs...))
 		}
 	}
+
+	fmt.Println(conds)
 
 	if req.ScheduleType != 0 {
 		conds = append(conds, tbScheduleInfo.ScheduleTimes.Eq(int64(req.ScheduleType)))
