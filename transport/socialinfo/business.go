@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	social_request "inkfinance.xyz/request/social"
 	services "inkfinance.xyz/service"
@@ -23,8 +24,6 @@ func decodeQuerySocialRequest(_ context.Context, r *http.Request) (interface{}, 
 		fmt.Println(err)
 		return nil, err
 	}
-
-	
 
 	req := &social_request.QuerySocialInfoRequest{}
 	err := transport.ParseForm(r.Form, req)
@@ -107,6 +106,19 @@ func MakeAutocompleteHandler(svc services.SocialInfoService) http.Handler {
 		decodeAutocompleteRequest,
 		encodeSocialResponse,
 		transport.ErrorServerOption(), // 自定义错误处理
+	)
+	return handler
+}
+
+func MakeQuerySocialMediaExistHandler(svc services.SocialInfoService) http.Handler {
+	handler := httpTransport.NewServer(
+		transport.BuildEndpoint(reflect.ValueOf(svc.QueryMediaoExist)),
+		transport.BuildDecodeRequest(&social_request.ValidSocialContentRequest{}),
+		transport.EncodeResponse,
+		transport.ErrorServerOption(),
+		httpTransport.ServerBefore(func(ctx context.Context, req *http.Request) context.Context {
+			return ctx
+		}),
 	)
 	return handler
 }

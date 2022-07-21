@@ -19,6 +19,7 @@ import (
 func RegisterRouter(mux *http.ServeMux) {
 
 	mux.Handle("/social/query", social_transport.MakeQuerySocialMediaHandler(services.SocialInfoService{}))
+	mux.Handle("/social/exist", social_transport.MakeQuerySocialMediaExistHandler(services.SocialInfoService{}))
 	mux.Handle("/social/valid", social_transport.MakeValidSocialInfoHandler(services.SocialInfoService{}))
 	mux.Handle("/social/autocomplete", social_transport.MakeAutocompleteHandler(services.SocialInfoService{}))
 	mux.Handle("/proposal/flag", proposal_transport.MakeUpdateProposalStatus(services.ProposalService{}))

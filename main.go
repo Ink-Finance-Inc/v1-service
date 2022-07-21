@@ -69,7 +69,11 @@ func main() {
 
 	// engine := gin.New()
 	// engine.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	chain.StartChainScan()
+	// startChainScan()
 	log.WithField("error", <-errc).Info("Exit")
 
+}
+
+func startChainScan() {
+	chain.StartChainScan()
 }

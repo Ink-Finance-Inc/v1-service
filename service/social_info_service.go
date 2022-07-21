@@ -20,6 +20,7 @@ import (
 
 type ISocialInfoService interface {
 	ValidSocialInfo(ctx context.Context, req *request.ValidSocialContentRequest) (*request.ValidSocialContentResponse, error)
+	QueryMediaoExist(ctx context.Context, req *request.ValidSocialContentRequest) (bool, error)
 	QueryMediaInfo(ctx context.Context, req *request.QuerySocialInfoRequest) (*request.QuerySocialInfoResponse, error)
 	AutocompleteQuery(ctx context.Context, req *request.AutocompleteRequest) (*request.QuerySocialInfoResponse, error)
 }
@@ -31,6 +32,20 @@ func NewSocialInfoService() ISocialInfoService {
 		// middleware
 	}
 	return service
+}
+
+func (SocialInfoService) QueryMediaoExist(ctx context.Context, req *request.ValidSocialContentRequest) (bool, error) {
+	db := query.Use(conf.DB)
+
+	mDo := db.SocialInfo.WithContext(ctx)
+	_, err := mDo.Where(db.SocialInfo.SocialAccount.Eq(req.MediaAccount), db.SocialInfo.MediaType.Eq(req.MediaType)).First()
+	if err == nil {
+		// exist
+		return true, nil
+
+	}
+
+	return false, nil
 }
 
 func (SocialInfoService) ValidSocialInfo(ctx context.Context, req *request.ValidSocialContentRequest) (*request.ValidSocialContentResponse, error) {
