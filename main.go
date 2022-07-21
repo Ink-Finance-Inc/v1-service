@@ -7,6 +7,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"inkfinance.xyz/chain"
 	"inkfinance.xyz/conf"
 
 	// doc "inkfinance.xyz/docs"
@@ -68,7 +69,7 @@ func main() {
 
 	// engine := gin.New()
 	// engine.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	// chain.StartChainScan()
+	chain.StartChainScan()
 	log.WithField("error", <-errc).Info("Exit")
 
 }
