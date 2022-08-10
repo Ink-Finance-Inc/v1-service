@@ -21,6 +21,10 @@ type ProposalRegistryDecisionHandler struct {
 type ProposalRegistryNewProposalHandler struct {
 }
 
+
+
+
+
 func (r ProposalRegistryDecisionHandler) HandleEvent(client *ethclient.Client, opts *bind.FilterOpts, req interface{}, parent *model.ContractEventsProgress) error {
 	fmt.Println("start to handle ProposalRegistryDecisionHandler report")
 	contract := req.(*ProposalRegistry.ProposalRegistry)

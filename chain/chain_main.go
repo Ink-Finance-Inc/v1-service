@@ -96,6 +96,7 @@ func scan() {
 			if err == nil {
 				for i := 0; i < len(progress); i++ {
 					log.Println("handle:", progress[i])
+
 					handleContractEventProgress(progress[i])
 				}
 			}
@@ -209,10 +210,16 @@ func handleContractProgress(client *ethclient.Client, contractEvent *model.Contr
 
 		for _, h := range handler {
 			fmt.Println("handler to handle -- ", contractInterface)
-			err := h.HandleEvent(client, opts, contractInterface, contractEvent)
-			if err != nil {
-				fmt.Println(err)
-			}
+
+			chainbiz.Try(func() {
+
+				err := h.HandleEvent(client, opts, contractInterface, contractEvent)
+				if err != nil {
+					fmt.Println(err)
+				}
+
+			})
+
 		}
 
 		fmt.Println("now:", scanFrom, scanTo)

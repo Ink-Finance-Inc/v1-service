@@ -119,8 +119,10 @@ func (PaymentService) GetScheduleList(ctx context.Context, req *request.DAOSched
 	tbScheduleInfo := db.ScheduleInfo
 	var scheduleIDs []int32
 
+	fmt.Println("GetScheduleList start: ", req)
+
 	var conds []gen.Condition
-	if req.MemberAddress != "" {
+	if len(req.MemberAddress) > 0 {
 		tbScheduleMemberInfo := db.ScheduleMemberInfo
 		err := tbScheduleMemberInfo.WithContext(ctx).Select(tbScheduleMemberInfo.ScheduleID).Where(tbScheduleMemberInfo.DaoAddress.Eq(req.DAOAddress), tbScheduleMemberInfo.MemberAddr.Eq(req.MemberAddress)).Scan(&scheduleIDs)
 		if err == nil {
@@ -131,7 +133,7 @@ func (PaymentService) GetScheduleList(ctx context.Context, req *request.DAOSched
 		}
 	}
 
-	fmt.Println(conds)
+	fmt.Println("GetScheduleList query is :", conds)
 
 	if req.ScheduleType != 0 {
 		conds = append(conds, tbScheduleInfo.ScheduleTimes.Eq(int64(req.ScheduleType)))
@@ -143,6 +145,10 @@ func (PaymentService) GetScheduleList(ctx context.Context, req *request.DAOSched
 	}
 
 	scheduleList, err := db.ScheduleInfo.WithContext(ctx).Where(conds...).Find()
+
+	fmt.Println("GetScheduleList DAO:", conds)
+
+	req = &request.DAOScheduleRequest{}
 
 	if err == nil {
 		var schedules []request.ScheduleInfo
