@@ -21,6 +21,7 @@ type IProposalService interface {
 	GetProposalByDAO(ctx context.Context, req *request.QueryByDAOAddressReq) ([]request.ProposalListInfo, error)
 	GetProposalStatus(ctx context.Context, req *request.ProposalReq) (int32, error)
 	GetProposalMessage(ctx context.Context, req *request.ProposalReq) (string, error)
+	GetDAOProposalDecisionCount(ctx context.Context, req *request.DAOProposalReq) (request.ProposalDecisionInfoResp, error)
 }
 
 type ProposalService struct{}
@@ -30,6 +31,27 @@ func NewProposalService() IProposalService {
 		// middleware
 	}
 	return service
+}
+
+func (ProposalService) GetDAOProposalDecisionCount(ctx context.Context, req *request.DAOProposalReq) (request.ProposalDecisionInfoResp, error) {
+	db := query.Use(conf.DB)
+	tb := db.ProposalDecision
+	dao := tb.WithContext(ctx)
+
+	decisionInfo := request.ProposalDecisionInfoResp{}
+
+	openPropoalNum, err := dao.Where(tb.DaoAddress.Eq(req.DAOAddress), tb.Agree.Eq(-1)).Count()
+	passPropoalNum, err := dao.Where(tb.DaoAddress.Eq(req.DAOAddress), tb.Agree.Eq(1)).Count()
+	failPropoalNum, err := dao.Where(tb.DaoAddress.Eq(req.DAOAddress), tb.Agree.Eq(0)).Count()
+
+	if err == nil {
+		decisionInfo.FailPropoalNum = failPropoalNum
+		decisionInfo.OpenPropoalNum = openPropoalNum
+		decisionInfo.PassPropoalNum = passPropoalNum
+	}
+
+	return decisionInfo, nil
+
 }
 
 func (ProposalService) GetProposalMessage(ctx context.Context, req *request.ProposalReq) (string, error) {
@@ -94,7 +116,7 @@ func (ProposalService) GetProposalByDAO(ctx context.Context, req *request.QueryB
 		conds = append(conds, tb.Agree.Eq(req.Status))
 	}
 
-	dao.Where(conds...).Select(tb.DaoAddress.As("DAOAddress"), tb.ProposalID.As("ProposalID"), tb.Subcategory.As("Subcategory"), tb.AuditPeriod.As("AuditPeriod"),
+	dao.Where(conds...).Select(tb.UpdateTime.As("CreateTime"), tb.DaoAddress.As("DAOAddress"), tb.ProposalID.As("ProposalID"), tb.Subcategory.As("Subcategory"), tb.AuditPeriod.As("AuditPeriod"),
 		tb.NewProposalHeight.As("BlockHeight"), tb.Category.As("Category"), tb.Agree.As("Agree"), tb.ProposalTitle.As("ProposalTitle")).Scan(&results)
 
 	sort.Slice(results, func(i, j int) bool {

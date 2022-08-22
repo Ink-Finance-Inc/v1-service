@@ -51,6 +51,18 @@ func MakeQueryProposalDecisionService(svc services.ProposalService) http.Handler
 	return handler
 }
 
+func MakeQueryProposalDecisionCountService(svc services.ProposalService) http.Handler {
+	handler := httpTransport.NewServer(
+		transport.BuildEndpoint(reflect.ValueOf(svc.GetDAOProposalDecisionCount)),
+		transport.BuildDecodeRequest(&request.DAOProposalReq{}),
+		transport.EncodeResponse,
+		transport.ErrorServerOption(),
+		httpTransport.ServerBefore(func(ctx context.Context, req *http.Request) context.Context {
+			return ctx
+		}),
+	)
+	return handler
+}
 func MakeProposalListHandler(svc services.ProposalService) http.Handler {
 	handler := httpTransport.NewServer(
 		transport.BuildEndpoint(reflect.ValueOf(svc.GetProposalByDAO)),

@@ -62,4 +62,19 @@ type ProposalListInfo struct {
 	BlockHeight   int64  `json:"blockHeight"`
 	Agree         int    `json:"agree"`
 	ProposalTitle string `json:"proposalTitle"`
+	CreateTime    string `json:"createTime"`
+}
+
+type DAOProposalReq struct {
+	DAOAddress string `json:"daoAddress"`
+}
+
+type ProposalDecisionInfoResp struct {
+	OpenPropoalNum int64 `json:"openPropoalNum"`
+	PassPropoalNum int64 `json:"passPropoalNum"`
+	FailPropoalNum int64 `json:"failPropoalNum"`
+}
+
+type DAOProposalDecisions struct {
+	DAOAddress int32
 }

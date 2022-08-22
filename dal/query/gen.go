@@ -16,6 +16,7 @@ func Use(db *gorm.DB) *Query {
 		db:                     db,
 		AuditReport:            newAuditReport(db),
 		ContractEventsProgress: newContractEventsProgress(db),
+		DaoInfo:                newDaoInfo(db),
 		DaoList:                newDaoList(db),
 		DaoUcvMapping:          newDaoUcvMapping(db),
 		ExecuteMessage:         newExecuteMessage(db),
@@ -36,6 +37,7 @@ type Query struct {
 
 	AuditReport            auditReport
 	ContractEventsProgress contractEventsProgress
+	DaoInfo                daoInfo
 	DaoList                daoList
 	DaoUcvMapping          daoUcvMapping
 	ExecuteMessage         executeMessage
@@ -57,6 +59,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		db:                     db,
 		AuditReport:            q.AuditReport.clone(db),
 		ContractEventsProgress: q.ContractEventsProgress.clone(db),
+		DaoInfo:                q.DaoInfo.clone(db),
 		DaoList:                q.DaoList.clone(db),
 		DaoUcvMapping:          q.DaoUcvMapping.clone(db),
 		ExecuteMessage:         q.ExecuteMessage.clone(db),
@@ -75,6 +78,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 type queryCtx struct {
 	AuditReport            auditReportDo
 	ContractEventsProgress contractEventsProgressDo
+	DaoInfo                daoInfoDo
 	DaoList                daoListDo
 	DaoUcvMapping          daoUcvMappingDo
 	ExecuteMessage         executeMessageDo
@@ -93,6 +97,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
 		AuditReport:            *q.AuditReport.WithContext(ctx),
 		ContractEventsProgress: *q.ContractEventsProgress.WithContext(ctx),
+		DaoInfo:                *q.DaoInfo.WithContext(ctx),
 		DaoList:                *q.DaoList.WithContext(ctx),
 		DaoUcvMapping:          *q.DaoUcvMapping.WithContext(ctx),
 		ExecuteMessage:         *q.ExecuteMessage.WithContext(ctx),

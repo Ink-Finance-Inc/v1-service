@@ -26,6 +26,7 @@ func RegisterRouter(mux *http.ServeMux) {
 	mux.Handle("/proposal/allow", proposal_transport.MakeAllowToCreateProposalHandler(services.ProposalService{}))
 	mux.Handle("/proposal/query", proposal_transport.MakeQueryDAOInfoService(services.ProposalService{}))
 	mux.Handle("/proposal/decision", proposal_transport.MakeQueryProposalDecisionService(services.ProposalService{}))
+	mux.Handle("/proposal/decision/count", proposal_transport.MakeQueryProposalDecisionCountService(services.ProposalService{}))
 	mux.Handle("/proposal/list", proposal_transport.MakeProposalListHandler(services.ProposalService{}))
 	mux.Handle("/proposal/message", proposal_transport.MakeProposalMessageHandler(services.ProposalService{}))
 	mux.Handle("/proposal/status", proposal_transport.MakeProposalStatusHandler(services.ProposalService{}))
@@ -41,6 +42,9 @@ func RegisterRouter(mux *http.ServeMux) {
 	mux.Handle("/payment/withdraw", payment_transport.MakeWithdrawHandler(services.PaymentService{}))
 
 	mux.Handle("/dao/list", dao_transport.MakeGetDAOListService(services.DAOService{}))
+
+	mux.Handle("/dao/info", dao_transport.MakeGetDAOInfoService(services.DAOService{}))
+	mux.Handle("/dao/info/bind", dao_transport.MakeDAOInfoBindService(services.DAOService{}))
 
 	mux.Handle("/util/key/set", util_transport.MakeSetKeyHandler(services.UtilService{}))
 	mux.Handle("/util/key/get", util_transport.MakeGetKeyHandler(services.UtilService{}))
