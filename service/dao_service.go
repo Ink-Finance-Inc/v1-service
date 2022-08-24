@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	conf "inkfinance.xyz/conf"
+	"inkfinance.xyz/dal/model"
 	"inkfinance.xyz/dal/query"
 	request "inkfinance.xyz/request/dao"
 )
@@ -46,6 +47,7 @@ func (DAOService) BindDAOInfo(ctx context.Context, req *request.DAOInfoBindReq) 
 
 	info, err := dao.Where(tb.DaoAddress.Eq(req.DAOAddress)).First()
 	if err != nil {
+		info = &model.DaoInfo{}
 		info.DaoAddress = req.DAOAddress
 		info.DaoLogo = req.DAOLogo
 	} else {
@@ -53,7 +55,7 @@ func (DAOService) BindDAOInfo(ctx context.Context, req *request.DAOInfoBindReq) 
 	}
 
 	dao.Save(info)
-	return 1, err
+	return 1, nil
 
 }
 
@@ -64,7 +66,7 @@ func (DAOService) GetDAOList(ctx context.Context, req *request.GetDAOReq) ([]req
 	tbSocial := db.SocialInfo
 	tbDAOInfo := db.DaoInfo
 	var results []request.DAOInfo
-	dao.LeftJoin(tbSocial, tbSocial.MainAccounts.EqCol(tb.AdminWallet)).LeftJoin(tbDAOInfo, tbDAOInfo.DaoAddress.EqCol(tb.DaoAddress)).Select(tbDAOInfo.DaoLogo.As("DaoLogo"), tbSocial.SocialAccount.As("MediaAccount"), tbSocial.MediaType.As("MediaType"), tb.DaoAddress.As("DAOAddress"), tb.AdminWallet.As("AdminWallet"), tb.BlockHeight.As("BlockHeight")).ScanByPage(&results, int((req.Page-1)*req.Size), int(req.Size))
+	dao.LeftJoin(tbSocial, tbSocial.MainAccounts.EqCol(tb.AdminWallet)).LeftJoin(tbDAOInfo, tbDAOInfo.DaoAddress.EqCol(tb.DaoAddress)).Select(tbDAOInfo.DaoLogo.As("DAOLogo"), tbSocial.SocialAccount.As("MediaAccount"), tbSocial.MediaType.As("MediaType"), tb.DaoAddress.As("DAOAddress"), tb.AdminWallet.As("AdminWallet"), tb.BlockHeight.As("BlockHeight")).ScanByPage(&results, int((req.Page-1)*req.Size), int(req.Size))
 
 	for i := 0; i < len(results); i++ {
 		if results[i].MediaAccount != "" {
